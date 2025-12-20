@@ -1,5 +1,4 @@
 .venv
-*.wav
 /images
 /tts
 /ocr

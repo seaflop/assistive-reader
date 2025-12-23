@@ -5,3 +5,6 @@ pynput
 pygame
 paddleocr
 paddlepaddle
+gpiozero
+picamera
+picamera2

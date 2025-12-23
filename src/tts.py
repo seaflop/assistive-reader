@@ -11,9 +11,10 @@ import file_management as fm
 
 # Initialize and configure pyttsx3
 voice_engine = pyttsx3.init()
+time.sleep(0.1)
 voices = voice_engine.getProperty('voices')
 voice_type = voices[1].id
-voice_rate = 120
+voice_rate = 80
 volume = float(1.0) # MUST BE FLOAT
 voice_engine.setProperty("rate", voice_rate)
 voice_engine.setProperty("volume", volume)

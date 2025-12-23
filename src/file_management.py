@@ -1,8 +1,10 @@
 import os
 import time
 import logging
-logging.basicConfig(level=logging.INFO, format = " %(asctime)s - %(levelname)s - %(message)s")
-#logging.disable(logging.CRITICAL) # COMMENT OUT THIS LINE TO DISABLE LOGGING MESSAGES
+logging.basicConfig(level=logging.INFO, 
+                    format = " %(asctime)s - %(levelname)s - %(message)s")
+# COMMENT OUT THE BELOW LINE TO DISABLE LOGGING MESSAGES
+#logging.disable(logging.CRITICAL) 
 
 # All file locations
 tts_dir = "./tts"
@@ -11,7 +13,7 @@ tts_path = os.path.join(tts_dir, tts_file)
 base_tts_file = "tts.wav"
 
 image_dir = "./images"
-image_file = "example6.jpg"
+image_file = "example8.jpg"
 image_path = os.path.join(image_dir, image_file)
 base_image_file = "image.jpg"
 
@@ -20,13 +22,10 @@ ocr_file = "ocr1.txt"
 ocr_path = os.path.join(ocr_dir, ocr_file)
 base_ocr_file = "ocr.txt"
 
-current_dir = os.getcwd()
-
 """
     Make directories if they do not exist
 """
 def init_folders():
-    print("I AM RAISING HELL FOR SOME REASON")
     logging.info("Creating necessary directories")
 
     for path in (tts_dir, image_dir, ocr_dir):
@@ -98,6 +97,7 @@ def shift_files(base_name: str, directory = ".", max_num_of_files = 1):
     
     # Delete extra files
     while(os.path.isfile(file_path)):
+
         os.remove(file_path)
         logging.info(f"Removed {file_path}")
         count_up += 1

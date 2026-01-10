@@ -13,7 +13,11 @@ A RaspberryPi-specific script is coming soon!
 
 ### Setup for Linux/Windows
 
-*Ensure that you have Python version 3.10 or later installed on your system.*
+*Ensure that you have Python version 3.10.0 or later installed on your system.*
+
+```
+python --version
+```
 
 *PaddleOCR is known to have issues with MacOS running on M-series chips. You can attempt to follow the instructions below for the Linux installation, but it is not guaranteed to work.*
 
@@ -52,6 +56,7 @@ python -m venv .venv
 #### Download the required packages.
 
 ```
+pip insatll --upgrade pip
 pip install -r requirements.txt
 ```
 
@@ -59,8 +64,16 @@ pip install -r requirements.txt
 
 Run the script from the `capstone` directory, and provide the path to the image you'd like to test on.
 
+Linux:
+
 ```
 python ./src/main.py -i "pathtoyourimagehere.jpg"
+```
+
+Windows:
+
+```
+python .\src\main.py -i "pathtoyourimagehere.jpg"
 ```
 
 The script will play a "ding" noise when it is ready to run. This may take some time, especially on the first run, as all the models will have to be downloaded first.
@@ -79,12 +92,51 @@ Required Hardware:
 - Raspberry Pi Camera 3
 - Button connected to GPIO 
 
+#### Download Python 3.10.0
+
+This script specifically requires Python version 3.10.0 to work properly.
+
+```
+sudo apt install pyenv
+pyenv install 3.10.0
+```
+
+Run `pyenv init` and follow the instructions.
+
+#### Download/Clone the repository in any directory you'd like.
+
+```
+git clone https://github.com/seaflop/capstone
+```
+
+#### Navigate to the `capstone` directory.
+
+```
+cd capstone
+```
+
 #### Activate a Python virtual environment
 
 Make sure to include system-wide packages.
 
 ```
+pyenv shell 3.10.0
 python3 -m venv .venv --system-site-packages
 source .venv/bin/activate
 
+```
+
+#### Download the required packages.
+
+```
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+#### Run the script
+
+Run the script from the `capstone` directory,
+
+```
+python ./src/main.py
 ```

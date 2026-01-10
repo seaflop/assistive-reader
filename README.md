@@ -1,7 +1,7 @@
 # Embedded OCR-to-Speech System for Visually Impaired Users
 
 ## About
-This repository contains the code for a wearable device that helps visually impaired users to read text in natural scene conditions. It is capable of taking a picture, performing optical character recognition on it, and producing a text-to-speech output
+This repository contains the code for a wearable device that helps visually impaired users to read text in natural scene conditions. It is capable of taking a picture, performing optical character recognition on it, and producing a text-to-speech output for the user.
 
 The script uses PaddleOCR to perform optical character recognition, and Piper to perform text-to-speech (thank you Danny).
 
@@ -57,7 +57,7 @@ pip install -r requirements.txt
 
 #### Run the Script
 
-Run the script from the `capstone` directory.
+Run the script from the `capstone` directory, and provide the path to the image you'd like to test on.
 
 ```
 python ./src/main.py -i "path/to/your/image/here.jpg"

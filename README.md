@@ -14,7 +14,7 @@ The button for input detection is connected to GPIO pin 14.
 
 ### Setup for Linux
 
-*Ensure that you have Python version 3.10 or later.*
+*Ensure that you have Python version 3.10 or later installed on your system.*
 
 **NOTE:** *Since this project uses the pynput package for monitoring keyboard events, this script will not work on Linux DEs using the Wayland Protocol*
 
@@ -34,8 +34,6 @@ Linux:
 $ python3 -m venv .venv
 $ source .venv/bin/activate
 ```
-
-
 
 4. Download the required packages.
 

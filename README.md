@@ -1,9 +1,9 @@
 # Embedded OCR-to-Speech System for Visually Impaired Users
 
 ## About
-This repository contains the code for a wearable device that helps visually impaired users to read text in natural scene conditions.
+This repository contains the code for a wearable device that helps visually impaired users to read text in natural scene conditions. It is capable of taking a picture, performing optical character recognition on it, and producing a text-to-speech output
 
-The script uses PaddleOCR to perform optical character recognition, and Piper to perform text-to-speech.
+The script uses PaddleOCR to perform optical character recognition, and Piper to perform text-to-speech (thank you Danny).
 
 There is a `main.py` script that can be run on Windows/Linux machines to test the functionality of the system (see the Setup for Linux/Windows instructions below).
 

@@ -1,10 +1,6 @@
-numpy
-pyttsx3
 opencv-python
 pynput
 pygame
 paddleocr
 paddlepaddle
-gpiozero
-picamera
-picamera2
+piper-tts

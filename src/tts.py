@@ -1,135 +1,92 @@
-import pyttsx3
-from pynput import keyboard
-from pygame import mixer
-import logging
-logging.basicConfig(level=logging.INFO, format = " %(asctime)s - %(levelname)s - %(message)s")
-#logging.disable(logging.CRITICAL) # COMMENT OUT THIS LINE TO DISABLE LOGGING MESSAGES
-import os
+from piper import PiperVoice, SynthesisConfig
+import wave
 import time
+import os
+from threading import Thread
+from pynput import keyboard
+from audio_management import AudioManager
+from file_management import FileManager
+import error_checker as e
 
-import file_management as fm
+# Inherits from the AudioManager and FileManager classes.
+class TTS(AudioManager, FileManager):
+    def __init__(self, path_to_voice: str, speed = float(5.0), volume = float(1.0), **kwargs):
 
-# Initialize and configure pyttsx3
-voice_engine = pyttsx3.init()
-time.sleep(0.1)
-voices = voice_engine.getProperty('voices')
-voice_type = voices[1].id
-voice_rate = 80
-volume = float(1.0) # MUST BE FLOAT
-voice_engine.setProperty("rate", voice_rate)
-voice_engine.setProperty("volume", volume)
-voice_engine.setProperty("voice", voice_type)
+        # Make sure that path_to_voice is a string
+        if (not isinstance(path_to_voice, str)):
+            raise TypeError(f"path_to_voice: {path_to_voice} must be a string")
+        
+        # Make sure that path_to_voice exists
+        if (not os.path.isfile(path_to_voice)):
+            raise OSError(f"path_to_voice: {path_to_voice} file location not found")
 
-# Initialize pygame mixer for audio output
-mixer.init()
+        # Make sure that voice rate is a float.
+        if (not isinstance(speed, float)):
+            raise TypeError(f"speed: {speed} must be an float")
 
-# Signal for handling audio interrupts
-interrupt_signal = False    # General interrupt signal for stopping any process
-pause_signal = False        # Specific signal meant for pausing/playing audio output
+        # Make sure that volume is a float.
+        if (not isinstance(volume, float)):
+            raise TypeError(f"volume: {volume} must be a float")
+        
+        super().__init__(**kwargs)
+        self._path_to_voice = path_to_voice
+        self._speed= speed
+        self._volume = volume
 
-"""
-    This function checks for key presses.
-    It is used as part of the keyboard.Listener() for the on_press parameter.
-    Returns False to stop the listener.
-"""
-def on_press(key):
-    global interrupt_signal, pause_signal
-    try: 
-        logging.info("key {0} was pressed".format(key.char))
-    except AttributeError:
-        logging.info("key {0} was pressed".format(key))
-        if (key == keyboard.Key.space and pause_signal == False):
-            pause_signal = True
-            logging.info(f"Pause signal set to {pause_signal}")
-        elif (key == keyboard.Key.space and pause_signal == True):
-            pause_signal = False
-            logging.info(f"Pause signal set to {pause_signal}")
-        elif (key == key.esc):
-            interrupt_signal = True
-            logging.info(f"Interrupt signal set to {interrupt_signal}")
-            #return False # Stops the keyboard listener
+        # Initialize piper for tts and define configurations
+        self._voice = PiperVoice.load(self._path_to_voice)
+        self.configure_voice()
 
-def reset_signals():
-    global interrupt_signal, pause_signal
-    interrupt_signal = False
-    pause_signal = False
+    def configure_voice(self):
+        self._syn_config = SynthesisConfig(
+            volume = self._volume,
+            length_scale = self._speed
+        )
 
-"""
-    Uses pygame to play audio given the file location.
-"""
-def play_audio(file_location: str):
+    # Setter and getter methods for volume
+    @property
+    def volume(self) -> float:
+        return self._volume
     
-    # Make sure that the function call passed a string as the file_location parameter
-    assert isinstance(file_location, str), "File location passed must be a string."
+    @volume.setter
+    def volume(self, volume: float):
+        self._volume = volume
+        self.configure_voice()
+    
+    # Setter and getter methods for speed
+    @property
+    def speed(self) -> float:
+        return self._speed
 
-    # Make sure that the passed file_location parameter is a valid file location
-    assert os.path.isfile(file_location), "Error finding audio file"
+    @speed.setter
+    def speed(self, speed: float):
+        self._speed = speed
+        self.configure_voice()
+        
+    def make_TTS_file(self, text: str, audio_file_location: str):
+        # Make sure that text_file_location is a string
+        #assert isinstance(text_file_location, str), "text_file_location must be a string!"
 
-    global interrupt_signal, pause_signal
+        # Make sure that audio_file_location is a string
+        assert isinstance(audio_file_location, str), "audio_file_location must be a string!"
 
-    is_paused = False
+        # Make sure that text_file_location exists
+        #assert os.path.isfile(text_file_location), "text_file_location cannot be found!"
 
-    # Start listening for keyboard events
-    listener = keyboard.Listener(on_press=on_press)
-    listener.start()
-    logging.info("Started keyboard listener")
+        # Make sure that text_file_location has a ".txt" format
+        #assert text_file_location.endswith(".txt"), "text_file_location must be a .txt file!"
 
-    # Start playing audio
-    mixer.music.load(file_location)
-    mixer.music.play()
-    logging.info("Playing audio")
+        # Make sure that audio_file_location has a ".wav format"
+        assert audio_file_location.endswith(".wav"), "audio_file_location must be a .wav file!"
 
-    while (True):
-        # If stop signal received and running, stop it.
-        if (interrupt_signal and mixer.music.get_busy()):
-            break
-        # If stop signal received and paused, stop it.
-        elif (interrupt_signal and is_paused):
-            break
-        # If paused signal received and running, pause it.
-        elif (pause_signal and mixer.music.get_busy()):
-            mixer.music.pause()
-            is_paused = True
-            logging.info("Paused audio")
-        # If unpause signal received and not running, but was paused previously, run it.
-        elif (not pause_signal and not mixer.music.get_busy() and is_paused):
-            mixer.music.unpause()
-            is_paused = False
-            logging.info("Resumed audio")
-        # If not running and was not paused previously, stop it.
-        elif (not mixer.music.get_busy() and not is_paused):
-            break
+        self.make_space_for_file(audio_file_location, 3)
 
-    logging.info("Stopping keyboard listener")
-    listener.stop()
-    logging.info("Stopping audio playback")
-    mixer.music.stop()
-    logging.info("Resetting all signals")
-    reset_signals()
+        with wave.open(audio_file_location, "wb") as wav_file:
+            self._voice.synthesize_wav(text, wav_file)
 
-def TTS_to_file(text: str):
-
-    # Make sure that the function call passed a string as the text parameter
-    assert isinstance(text, str), "Text passed must be a string."
-
-    logging.info("Checking to make sure the file does not already exist")
-    fm.shift_files(fm.base_tts_file, directory=fm.tts_dir, max_num_of_files=5)
-
-    """
-    logging.info("Checking to make sure the file does not already exist")
-    if (os.path.isfile(tts_path)):
-        os.remove(tts_path)
-        logging.info("Removed already existing audio file")
-    """
-
-    logging.info("Text received")
-    voice_engine.save_to_file(text, fm.tts_path)
-    voice_engine.runAndWait()
-
-    # A while loop that sleeps for 0.1 seconds to ensure that the file gets created 
-    # before exiting the function.
-    while (not os.path.isfile(fm.tts_path)):
-        time.sleep(0.1)
-        logging.info("Slept for 0.1 seconds while waiting for .wav file creation")
-
-    logging.info(f"TTS saved to {fm.tts_path}")
+        # A while loop that sleeps for 0.1 seconds to ensure that the file gets created 
+        # before exiting the function. If this isn't included, sometimes bugs can arise.
+        while (not os.path.isfile(audio_file_location)):
+            time.sleep(0.1)
+        return
+    

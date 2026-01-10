@@ -1,119 +1,118 @@
+"""
+The class in this file is used for basic file management operations.
+It allows for easy creation of paths (with or without confirmation),
+and shifting files within a directory.
+"""
 import os
-import time
-import logging
-logging.basicConfig(level=logging.INFO, 
-                    format = " %(asctime)s - %(levelname)s - %(message)s")
-# COMMENT OUT THE BELOW LINE TO DISABLE LOGGING MESSAGES
-#logging.disable(logging.CRITICAL) 
 
-# All file locations
-tts_dir = "./tts"
-tts_file = "tts1.wav"
-tts_path = os.path.join(tts_dir, tts_file)
-base_tts_file = "tts.wav"
+class FileManager():
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
-image_dir = "./images"
-image_file = "example8.jpg"
-image_path = os.path.join(image_dir, image_file)
-base_image_file = "image.jpg"
+    def create_path(self, *paths: str):
+        for path in paths:
+            # Make sure that path is a string
+            assert isinstance(path, str), "path must be a string!"
+            os.makedirs(path, exist_ok=True)
 
-ocr_dir = "./ocr"
-ocr_file = "ocr1.txt"
-ocr_path = os.path.join(ocr_dir, ocr_file)
-base_ocr_file = "ocr.txt"
-
-"""
-    Make directories if they do not exist
-"""
-def init_folders():
-    logging.info("Creating necessary directories")
-
-    for path in (tts_dir, image_dir, ocr_dir):
-        os.makedirs(path, exist_ok=True)
-        logging.info(f"Ensured directory exists: {path}")
-
-"""
-    This function shifts files and renames them to open space
-    for a new file.
-    Takes a parameter for the directory we wish to perform the shift in,
-    the base name of the file that we wish to perform actions on, and the
-    maximum number of those files we want to keep.
-    e.g. 
-        directory = ./testing
-        base_name = test.txt
-        max_num_of_files = 4
-
-        ./testing/test5.txt -> deleted
-        ./testing/test4.txt -> deleted
-        ./testing/test3.txt -> test4.txt
-        ./testing/hello.wav -> unaffected
-        ./testing/test2.txt -> test3.txt
-        ./testing/test.py   -> unaffected
-        ./testing/test.txt  -> unaffected
-        ./testing/test1.txt -> test2.txt
-
-        This allows us to create a new test1.txt elsewhere in the program 
-        and not overwrite any old files.
-    
-    By default checks in the project folder directory and only allows for
-    one file of the base_name type.
-"""
-def shift_files(base_name: str, directory = ".", max_num_of_files = 1):
-
-    # Make sure that the passed directory is a string and exists.
-    assert isinstance(directory, str), "directory must be passed as a string"
-    assert os.path.exists(directory), "Error finding directory"
-    
-    # Make sure that the passed base_name is a string and that a "." exists
-    # somewhere in the file name.
-    assert isinstance(directory, str), "directory must be passed as a string"
-    assert "." in base_name, "base_name must contain a . somewhere in the string"
-
-    # Make sure that max_num_of_files is an integer
-
-    assert isinstance(max_num_of_files, int), "max_num_of_files must be an integer"
-    # Split the string at the last "." to split the name and file extension.
-    # Returns a tuple containing the prefix, delimiter, and postfix.
-    # of the string.
-    parts = base_name.partition(".") 
-    logging.info(f"Rarts of the base name are {parts}")
-
-    # Make sure that at least one file of the type base_name exists in the directory
-    # passed. Return if not found.
-    test_file = f"{parts[0]}1{parts[1]}{parts[2]}"
-    test_file_path = os.path.join(directory, test_file)
-    logging.info(f"Looking for {test_file_path}")
-    if not (os.path.isfile(test_file_path)):
-        logging.warning(f"Could not find {test_file_path}")
-        return
-    else:
-        logging.info(f"Found {test_file_path}")
-
-    # Define a path for the largest possible numbered file
-    count_up = 0
-    file = f"{parts[0]}{max_num_of_files + count_up}{parts[1]}{parts[2]}"
-    file_path = os.path.join(directory, file)
-    logging.info(f"Defined path for {file_path}")
-    
-    # Delete extra files
-    while(os.path.isfile(file_path)):
-
-        os.remove(file_path)
-        logging.info(f"Removed {file_path}")
-        count_up += 1
-        file = f"{parts[0]}{max_num_of_files + count_up}{parts[1]}{parts[2]}"
-        file_path = os.path.join(directory, file)
-
-    file_new = f"{parts[0]}{max_num_of_files}{parts[1]}{parts[2]}"
-    file_new_path = os.path.join(directory, file_new)
-    # Shift remaining files
-    for i in range(max_num_of_files, 1, -1):
-        file_current = f"{parts[0]}{i - 1}{parts[1]}{parts[2]}"
-        file_current_path = os.path.join(directory, file_current)
-        if(os.path.isfile(file_current_path)):
-            os.rename(file_current_path, file_new_path)
-            logging.info(f"Shifted up {file_current_path} to {file_new_path}")
+    def create_path_with_confirmation(self, path: str):
+        print(f"Cannot find an existing directory at {path}.\nCreate it?")
+        confirm_create_directory = str(input("y or n: "))
+        if (confirm_create_directory.lower() == "y"):
+            self.create_path(path)
         else:
-            logging.info(f"{file_current_path} does not exist")
-        file_new = file_current
-        file_new_path = os.path.join(directory, file_new)
+            raise OSError(f"{path=} cannot be found!")
+        return
+
+    """
+        The below function shifts files and renames them to open space
+        for a new file.
+        Takes a parameter for the directory we wish to perform the shift in,
+        the base name of the file that we wish to perform actions on, and the
+        maximum number of those files we want to keep.
+        e.g. 
+            directory = ./testing
+            base_name = test.txt
+            max_num_of_files = 4
+
+            ./testing/test5.txt -> deleted
+            ./testing/test4.txt -> deleted
+            ./testing/test3.txt -> test4.txt
+            ./testing/hello.wav -> unaffected
+            ./testing/test2.txt -> test3.txt
+            ./testing/test.py   -> unaffected
+            ./testing/test.txt  -> unaffected
+            ./testing/test1.txt -> test2.txt
+
+            This allows us to create a new test1.txt elsewhere in the program 
+            and not overwrite any old files.
+        
+        By default checks in the project folder directory and only allows for
+        one file of the base_name type.
+    """
+    def make_space_for_file(self, file_location: str, max_num_of_files = 1):
+        # Make sure that file_location is a string
+        assert isinstance(file_location, str), "file_location must be a string!"
+
+        # Split file_location into directory_name and file_name
+        directory_name, file_name = os.path.split(file_location)
+
+        # Check that directory_name exists. If not, create it with confimation.
+        if (not os.path.exists(directory_name)):
+            self.create_path_with_confirmation(directory_name)
+
+        # Make sure that file_name contains a "1"
+        assert "1" in file_name, "incorrect formatting for file_location!"
+
+        # Make sure that max_num_of_files is an integer
+        assert isinstance(max_num_of_files, int), "max_num_of_files must be an integer!"
+
+        # Split the file_name at the last occurrence of "1"
+        parts = file_name.rsplit("1", 1)
+
+        # Shift files up 
+        for index in range(max_num_of_files, 1, -1):
+            if (os.path.isfile(
+                file_location:= os.path.join(
+                    directory_name, f"{parts[0]}{index - 1}{parts[1]}")
+                )
+            ):
+                os.rename(file_location, os.path.join(directory_name, f"{parts[0]}{index}{parts[1]}"))
+
+        # Shift files down in case we already have space
+        # First make sure the directory isn't empty and then find the lowest file location 
+        lowest_file_num = 1
+        while (not os.path.isfile(
+            os.path.join(
+                directory_name, f"{parts[0]}{lowest_file_num}{parts[1]}")
+            ) and len(os.listdir(directory_name)) != 0
+        ):
+            lowest_file_num += 1
+        # Then we shift the files down
+        for index in range(2, max_num_of_files):
+            if (lowest_file_num > 2):
+                os.rename(
+                    os.path.join(
+                        directory_name, f"{parts[0]}{lowest_file_num}{parts[1]}"), 
+                    os.path.join(
+                        directory_name, f"{parts[0]}{index}{parts[1]}"))
+                lowest_file_num += 1
+            #os.rename()
+
+        # Delete extra files
+        highest_file_num = max_num_of_files
+        # Here we just keep checking if any files above the max_num_of_files exist and delete them
+        while (os.path.isfile(
+            highest_file_location := os.path.join(
+                directory_name, f"{parts[0]}{highest_file_num + 1}{parts[1]}")
+            )
+        ):
+            os.remove(highest_file_location)
+            highest_file_num += 1
+
+
+        return
+
+if __name__ == "__main__":
+    fm = FileManager()
+    fm.make_space_for_file("./ocr/ocr1.txt", 3)

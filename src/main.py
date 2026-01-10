@@ -32,7 +32,7 @@ def on_press(key):
         pass
 
 def main():
-    global c, stop_flag
+    global c, stop_flag, image_path
 
     if (stop_flag):
         return
@@ -57,11 +57,11 @@ def main():
     
     if (stop_flag):
         return
-    c.resize_image(fl.image_path)
+    c.resize_image(image_path)
 
     if (stop_flag):
         return
-    c.ocr(fl.image_path, fl.ocr_path)
+    c.ocr(image_path, fl.ocr_path)
     
     if (stop_flag):
         return
@@ -100,7 +100,7 @@ if __name__ == "__main__":
                         default= fl.image_path)
     args = parser.parse_args()
 
-    fl.image_path = args.image
+    image_path = args.image
 
     program_running = True
     listener = keyboard.Listener(on_press=on_press)

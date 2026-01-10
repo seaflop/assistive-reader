@@ -90,21 +90,9 @@ Required Hardware:
 - Raspberry Pi Camera 3
 - Button connected to GPIO 
 
-#### Install Paddle (instructions from Q-Engineering Website)
+#### Install dependencies
 
-```
-sudo apt-get update
-sudo apt-get upgrade
-install dependencies
-sudo apt-get install cmake wget
-sudo apt-get install libatlas-base-dev libopenblas-dev libblas-dev
-sudo apt-get install liblapack-dev patchelf gfortran
-sudo -H pip3 install Cython
-pip3 install six requests wheel pyyaml
-wget https://github.com/Qengineering/Paddle-Raspberry-Pi/raw/main/paddlepaddle-2.4.2-cp39-cp39-linux_aarch64.whl
-sudo -H pip3 install paddlepaddle-2.4.2-cp39-cp39-linux_aarch64.whl
-rm paddlepaddle-2.4.2-cp39-cp39-linux_aarch64.whl
-```
+Follow [Q-Engineering's steps](https://qengineering.eu/install-paddlepaddle-on-raspberry-pi-4.html) to install Paddle via pip3, PaddleHub, and Paddle Lite
 
 #### Download Python 3.10.0
 

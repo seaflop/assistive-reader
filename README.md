@@ -92,7 +92,7 @@ Required Hardware:
 
 #### Install dependencies
 
-Follow [Q-Engineering's steps](https://qengineering.eu/install-paddlepaddle-on-raspberry-pi-4.html) to install Paddle via pip3, PaddleHub, and Paddle Lite
+Follow [Q-Engineering's steps](https://qengineering.eu/install-paddlepaddle-on-raspberry-pi-4.html) to install Paddle via pip3, PaddleHub, and Paddle Lite. Alternatively (and this is much easier), you can [download an OS from Q-Engineering](https://github.com/Qengineering/RPi-Bullseye-DNN-image) preloaded with all the necessary frameworks.
 
 #### Download Python 3.10.0
 

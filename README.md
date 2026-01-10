@@ -63,7 +63,7 @@ Run the script from the `capstone` directory, and provide the path to the image 
 python ./src/main.py -i "pathtoyourimagehere.jpg"
 ```
 
-The script will play a "ding" noise when it is ready to run. This may take some time, especially on the first run as all the models will have to be downloaded first.
+The script will play a "ding" noise when it is ready to run. This may take some time, especially on the first run, as all the models will have to be downloaded first.
 
 Press Space to start the script.
 

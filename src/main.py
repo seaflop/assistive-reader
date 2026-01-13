@@ -128,6 +128,8 @@ def main():
         return
     c.play(fl.tts_path)
 
+    c
+
     started = False
     
 

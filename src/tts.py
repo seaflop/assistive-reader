@@ -5,7 +5,6 @@ import os
 from threading import Thread
 from pynput import keyboard
 from audio_management import AudioManager
-import error_checker as e
 
 # Inherits from the AudioManager and FileManager classes.
 class TTS(AudioManager):

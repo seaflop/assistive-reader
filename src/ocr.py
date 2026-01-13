@@ -47,11 +47,3 @@ class OCR():
         logging.info(f"removed the original image located at {image_location}")
         cv2.imwrite(image_location, resized_image)
         logging.info(f"created a new resized image located at {image_location}")
-
-if __name__ == "__main__":
-    o = OCR()
-    print("instantiated")
-    o.resize_image("./images/example2.jpg")
-    print("resized")
-    o.ocr("./images/example2.jpg", "./ocr/ocr1.txt")
-    print("done")

@@ -41,9 +41,3 @@ class Capstone(TTS, OCR):
         # When everything is done, release the capture and destroy windows
         camera.release()
         cv2.destroyAllWindows()
-
-if __name__ == "__main__":
-    import file_locations as fl
-    c = Capstone(path_to_voice = fl.voice_path)
-    c.take_picture("./images/image.jpg")
-

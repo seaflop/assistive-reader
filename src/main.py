@@ -75,7 +75,7 @@ def do_ocr():
     return
 
 def main():
-    global c, program_running, stop_flag, started
+    global c, stop_flag, started
 
     if (stop_flag):
         return
@@ -111,6 +111,7 @@ def main():
 
     if (stop_flag):
         return
+    print("\nPlease wait...\n")
     t = Thread(target=do_ocr)
     t.start()
     while (t.is_alive()):
@@ -131,7 +132,6 @@ def main():
 
 if __name__ == "__main__":
 
-    program_running = True
     listener = keyboard.Listener(on_press=on_press)
     listener.start()
 

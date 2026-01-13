@@ -6,7 +6,7 @@ class Capstone(TTS, OCR):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
     
-    def take_picture(self, image_location: str):
+    def take_picture(self, image_file_location: str):
         
         camera = cv2.VideoCapture(0)
         if (not camera.isOpened()):

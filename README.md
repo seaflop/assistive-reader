@@ -76,6 +76,8 @@ Windows:
 python .\src\main.py -i "pathtoyourimagehere.jpg"
 ```
 
+or
+
 ```
 python .\src\main.py -w
 ```

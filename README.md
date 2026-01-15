@@ -1,9 +1,13 @@
 # Embedded OCR-to-Speech System for Visually Impaired Users
 
 ## About
-This branch of the repository contains the code that can be used to test the functionality for a wearable device that helps visually impaired users to read text in natural scene conditions on Windows/POSIX-compliant machines. It is capable of taking a picture, performing optical character recognition on it, and producing a text-to-speech output for the user.
+This repository contains the code for a wearable device that helps visually impaired users to read text in natural scene conditions. There is also a version of the script that can be run on Windows/POSIX-compliant machines to test functionality. Both versions are capable of taking a picture, performing optical character recognition on it, and producing a text-to-speech output for the user.
 
-This script uses RapidOCR for text detection/recognition and Piper for text-to-speech functionality (thank you Danny!)
+This script uses [RapidOCR](https://github.com/RapidAI/RapidOCR) for text detection/recognition and [Piper](https://github.com/rhasspy/piper) for text-to-speech functionality (thank you Danny!).
+
+This project is still in progress, so check back every once in a while for updates!
+
+Expected completion: April 2026
 
 ## Setup for POSIX/Windows
 

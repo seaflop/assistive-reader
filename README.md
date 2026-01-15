@@ -86,7 +86,7 @@ or
 python .\src\main.py -w
 ```
 
-The script will play a "ding" noise when it is ready to run. This may take some time, especially on the first run, as all the models will have to be downloaded first.
+The script will prompt you for input when it is ready to run. This may take some time, especially on the first run, as all the models will have to be downloaded first.
 
 Press Space to start the script.
 

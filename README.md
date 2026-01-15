@@ -3,7 +3,7 @@
 ## About
 This repository contains the code for a wearable device that helps visually impaired users to read text in natural scene conditions. There is also a version of the script that can be run on Windows/POSIX-compliant machines to test functionality. Both versions are capable of taking a picture, performing optical character recognition on it, and producing a text-to-speech output for the user.
 
-This script uses [RapidOCR](https://github.com/RapidAI/RapidOCR) for text detection/recognition and [Piper](https://github.com/rhasspy/piper) for text-to-speech functionality (thank you Danny!).
+This script uses <a href="https://github.com/RapidAI/RapidOCR" target="_blank">RapidOCR</a> for text detection/recognition and <a href="https://github.com/rhasspy/piper" target="_blank">Piper</a> for text-to-speech functionality (thank you Danny!).
 
 This project is still in progress, so check back every once in a while for updates!
 
@@ -94,4 +94,4 @@ If you specified `-w`, press Space to take a picture, or Esc to exit.
 
 You can exit the script at any time by pressing the Esc key.
 
-Audio playback can be paused/resumed by pressing the spacebar.
+Audio playback can be paused/resumed by pressing Space.

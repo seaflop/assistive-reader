@@ -21,6 +21,8 @@ def handle_press():
     # 1. Start the script if it has not yet been started
     # 2. Pause/Play audio output if audio is playing
     if (not started):
+        c.take_picture(fl.image_path)
+        c.play(fl.camera_sound_path)
         started = True
     else:
         if (c.is_paused and not c.is_stopped):
@@ -30,7 +32,7 @@ def handle_press():
     return
 
 def handle_hold():
-    global c, stop_flag, started
+    global c, stop_flag, started, exit_flag
     # Holding the button for 3 seconds will either:
     # 1. Exit the current iteration of the image->tts pipeline if the iteration is running
     # 2. Exit the program entirely if we're not doing any work
@@ -41,7 +43,7 @@ def handle_hold():
             c.stop()
     # Remove this later: We're going to replace this function with a switch
     else:
-        sys.exit()
+        exit_flag = True
 
 def make_dirs(*paths):
     for path in paths:
@@ -49,18 +51,16 @@ def make_dirs(*paths):
     return
 
 def do_ocr():
-    global c, image_path, stop_flag
+    global c, stop_flag, exit_flag
 
     if (stop_flag):
         return
-    c.resize_image(image_path)
+    c.resize_image(fl.image_path)
 
     if (stop_flag):
         return
-    # Try-Except handles the case in which no text is detected in the image
-    print(image_path)
     try:
-        c.ocr(image_path, fl.ocr_path)
+        c.ocr(fl.image_path, fl.ocr_path)
     except TypeError:
         stop_flag = True
         # Make sure we don't get overlap with the idling sound
@@ -90,7 +90,7 @@ def main():
     print("Waiting for input...")
 
     while (not started):
-        if (stop_flag):
+        if (exit_flag):
             return
         time.sleep(0.1)
 
@@ -102,8 +102,6 @@ def main():
 
     if (stop_flag):
         return
-    global image_path
-    image_path = fl.image_path
 
     if (stop_flag):
         return
@@ -113,6 +111,8 @@ def main():
     t.start()
     while (t.is_alive()):
         if (stop_flag):
+            while (not c.is_stopped):
+                time.sleep(0.1)
             break
         c.play(fl.idling_sound_path)
         time.sleep(1)
@@ -138,12 +138,15 @@ if __name__ == "__main__":
     c = Capstone(path_to_voice=fl.voice_path)
 
     button = Button(pin = BUTTON_PIN, bounce_time = 0.1, hold_time = 3.0)
-    button.when_pressed(handle_press)
-    button.when_held(handle_hold)
+    button.when_pressed = handle_press
+    button.when_held = handle_hold
+    
+    exit_flag = False
 
-    while (True):
+    while (not exit_flag):
         # We want to reset these flags every time we exit out of the main loop
         c.is_stoppable = False
         stop_flag = False
         started = False
+        print(started)
         main()

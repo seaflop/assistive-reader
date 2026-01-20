@@ -140,7 +140,6 @@ def main():
 
     if (stop_flag):
         return
-    c.is_stoppable = True
     c.play(fl.ready_sound_path)
 
     if (stop_flag):
@@ -150,6 +149,7 @@ def main():
 
     if (stop_flag):
         return
+    c.is_stoppable = True
     c.play(fl.tts_path)
 
     started = False

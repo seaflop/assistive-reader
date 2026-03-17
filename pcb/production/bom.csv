@@ -1,0 +1,12 @@
+﻿Designator,Footprint,Quantity,Value,LCSC Part #
+RV1,Potentiometer_Bourns_3314J_Vertical,1,R_Potentiometer_US,C36376
+SW1,SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm,1,SW_DPST_x2,C97448
+TP1,TestPoint_Pad_D2.5mm,1,CLK,
+TP2,TestPoint_Pad_D2.5mm,1,Dout,
+TP3,TestPoint_Pad_D2.5mm,1,Din,
+TP4,TestPoint_Pad_D2.5mm,1,CS/SHDN,
+TP5,TestPoint_Pad_D2.5mm,1,GPIO17,
+TP6,TestPoint_Pad_D2.5mm,1,VDD/VREF,
+TP7,TestPoint_Pad_D2.5mm,1,GND(ADC),
+TP8,TestPoint_Pad_D2.5mm,1,GND(BTN),
+U1,TSSOP-14_4.4x5mm_P0.65mm,1,MCP3004,C637056
